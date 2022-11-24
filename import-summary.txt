@@ -1,0 +1,135 @@
+ECLIPSE ANDROID PROJECT IMPORT SUMMARY
+======================================
+
+Ignored Files:
+--------------
+The following files were *not* copied into the new Gradle project; you
+should evaluate whether these are still needed in your project and if
+so manually move them:
+
+* SalesFrozen.keystore
+* a분석설계\
+* a분석설계\davada앱 환경.txt
+* a분석설계\개발주의사항.txt
+* a분석설계\개발툴\
+* a분석설계\개발툴\Motorola_End_User_Driver_Installation_5.3.0_32bit.zip
+* a분석설계\개발툴\PNA_PCTOOL_FOLDER 테이블 생성 쿼리.txt
+* a분석설계\개발툴\SQLite Expert Professional.exe
+* a분석설계\개발툴\TailMe.zip
+* a분석설계\개발툴\latest_usb_driver_windows.zip
+* a분석설계\데이타베이스\
+* a분석설계\데이타베이스\attch_file_table.sql
+* a분석설계\데이타베이스\equp_item_mobel_table.sql
+* a분석설계\데이타베이스\equp_item_table.sql
+* a분석설계\데이타베이스\equp_trans_item_table.sql
+* a분석설계\데이타베이스\equp_trans_table.sql
+* a분석설계\데이타베이스\salesasset.db
+* a분석설계\데이타베이스\z설계 테이블.SQL
+* a분석설계\디자인\
+* a분석설계\디자인\구글웹스토어\
+* a분석설계\디자인\구글웹스토어\앱스토어_냉동냉장AS 인트로.png
+* a분석설계\디자인\구글웹스토어\앱스토어_냉동냉장AS01_512_512.png
+* a분석설계\디자인\구글웹스토어\앱스토어_냉동냉장AS02_1024_500.jpg
+* a분석설계\디자인\구글웹스토어\자산관리\
+* a분석설계\디자인\구글웹스토어\자산관리\7인치 테블릿_초기화면2.jpg
+* a분석설계\디자인\구글웹스토어\자산관리\다바다 이미지2_1024_500.png
+* a분석설계\디자인\구글웹스토어\자산관리\다바다 이미지_512_512.jpg
+* a분석설계\디자인\구글웹스토어\자산관리\휴대전화_로딩이미지.jpg
+* a분석설계\참조소스\
+* a분석설계\참조소스\Image Gallery 기초소스.txt
+* a분석설계\참조소스\Image갤러리 ReadMe.txt
+* a분석설계\참조소스\Image갤러리 및 View.zip
+* a분석설계\참조소스\NFC샘플외\
+* a분석설계\참조소스\NFC샘플외\ReadMe.txt
+* a분석설계\참조소스\NFC샘플외\SampleNFC.zip
+* a분석설계\참조소스\NFC샘플외\SampleNFCTagWriter.zip
+* a분석설계\참조소스\NFC샘플외\SimpleNFC_Read_Writer.zip
+* a분석설계\참조소스\QR_Barcode_ZXingLib Sample.zip
+* a분석설계\참조소스\QR_Barcode_ZXingLib_Readme.txt
+* a분석설계\참조소스\SignCapture Save.zip
+* a분석설계\참조소스\camera_image_save.zip
+* a분석설계\참조소스\zxing_lib\
+* a분석설계\참조소스\zxing_lib\ZXing Format._sample__java.txt
+* a분석설계\참조소스\zxing_lib\ZXing-2.3.0.zip
+* a분석설계\참조소스\zxing_lib\ZXingLib1.7.zip
+* a분석설계\참조소스\zxing_lib\apache-maven-3.1.1-bin.zip
+* a분석설계\참조소스\zxing_lib\core-2.3.0.jar
+* a분석설계\참조소스\zxing_lib\zxing qr및 barcode 생성기.txt
+* a분석설계\참조소스\zxing_lib\zxing-j2se-1.7.jar
+* a분석설계\참조소스\zxing_lib\zxing-master.zip
+* a분석설계\참조소스\디자인\
+* a분석설계\참조소스\디자인\actionbar_style_example.zip
+* a분석설계\화면정의서\
+* a분석설계\화면정의서\다바다_장비관리_웹모바일_참조.pptx
+* a분석설계\화면정의서\모바일 장비관리_설계-테이블목록 및 데이타 정의서.xls
+* a분석설계\화면정의서\모바일 장비관리_설계-프로그램목록_메뉴구조도.xls
+* a분석설계\화면정의서\모바일 장비관리_화면정의서.pptx
+* ic_launcher-web.png
+* proguard-project.txt
+
+Replaced Jars with Dependencies:
+--------------------------------
+The importer recognized the following .jar files as third party
+libraries and replaced them with Gradle dependencies instead. This has
+the advantage that more explicit version information is known, and the
+libraries can be updated automatically. However, it is possible that
+the .jar file in your project was of an older version than the
+dependency we picked, which could render the project not compileable.
+You can disable the jar replacement in the import wizard and try again:
+
+android-support-v4.jar => com.android.support:support-v4:21.0.3
+gson-2.2.2.jar => com.google.code.gson:gson:2.2.2
+guava-r09.jar => com.google.guava:guava:18.0
+joda-time-1.5.1.jar => joda-time:joda-time:1.5.1
+
+Potentially Missing Dependency:
+-------------------------------
+When we replaced the following .jar files with a Gradle dependency, we
+inferred the dependency version number from the filename. This
+specific version may not actually be available from the repository.
+If you get a build error stating that the dependency is missing, edit
+the version number to for example "+" to pick up the latest version
+instead. (This may require you to update your code if the library APIs
+have changed.)
+
+gson-2.2.2.jar => version 2.2.2 in com.google.code.gson:gson:2.2.2
+joda-time-1.5.1.jar => version 1.5.1 in joda-time:joda-time:1.5.1
+
+Replaced Libraries with Dependencies:
+-------------------------------------
+The importer recognized the following library projects as third party
+libraries and replaced them with Gradle dependencies instead. This has
+the advantage that more explicit version information is known, and the
+libraries can be updated automatically. However, it is possible that
+the source files in your project were of an older version than the
+dependency we picked, which could render the project not compileable.
+You can disable the library replacement in the import wizard and try
+again:
+
+appcompat-v7 => [com.android.support:appcompat-v7:21.0.3]
+
+Moved Files:
+------------
+Android Gradle projects use a different directory structure than ADT
+Eclipse projects. Here's how the projects were restructured:
+
+* AndroidManifest.xml => app\src\main\AndroidManifest.xml
+* assets\ => app\src\main\assets\
+* lint.xml => app\lint.xml
+* res\ => app\src\main\res\
+* src\ => app\src\main\java\
+
+Next Steps:
+-----------
+You can now build the project. The Gradle project needs network
+connectivity to download dependencies.
+
+Bugs:
+-----
+If for some reason your project does not build, and you determine that
+it is due to a bug or limitation of the Eclipse to Gradle importer,
+please file a bug at http://b.android.com with category
+Component-Tools.
+
+(This import summary is for your information only, and can be deleted
+after import once you are satisfied with the results.)

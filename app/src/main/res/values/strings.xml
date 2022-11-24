@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="app_name">바쿠스전사관리서비스</string>
+    <string name="action_settings">Settings</string>
+
+    <!-- 환경설정 -->
+    <string name="ok">확인</string>
+    <string name="cfg_down">act환경</string>
+    <string name="cfg_davada_sms_ring_file">davada_sms_ring.mp3</string> 
+    <string name="cfg_davada_err_ring_file">davada_err_ring.mp3</string> 
+    <string name="cfg_file_alarm_path">/bacchus_erp/alarm/</string>
+    <string name="cfg_file_down_path">/bacchus_erp/voice/</string>
+    <string name="cfg_file_image_path">/bacchus_erp/image/</string>
+    <string name="cfg_file_log_path">/bacchus_erp/log/</string>
+    <string name="cfg_file_shinbank_path">/bacchus_erp/bank/88/</string>
+    <string name="cfg_shinhan_bankkey_file">BankKey.dat</string>
+
+    <!-- 클라우드서버 -->
+    <!--
+    <string name="Server">14.63.175.172:8080</string>
+    -->
+    <string name="Server">192.168.0.87:8080</string>
+
+    <!-- 접속프로그램 url목록 -->
+    <string name="url_request_orders">/v1/request-orders</string>
+
+    <!-- 사용자 fcmDeivieToken업데이트 url목록 -->
+    <string name="url_employees">/v1/employees/</string>
+
+    <!-- 프로그램명 -->
+    <string name="pgm_spalsh">바쿠스주문</string>
+    <string name="pgm_login">로그인</string>
+    <string name="pgm_mainmenu">메인메뉴</string>
+
+	<!-- 네크워크 -->
+	<string name="net_connect_fail">접속에 실패하였습니다.</string>
+	<string name="net_time_out">접속시간이 초과하였습니다.</string>
+	<string name="net_server_not_exist">서버가 존재하지 않습니다.</string>
+
+    <!--권한 팝업에서 노출될 메시지를 설정합니다.-->
+    <string name="settings">설정</string>
+    <string name="help">Help</string>
+    <string name="string_help_text"> 저장소 권한이 필요합니다. </string>
+    <string name="quit">확인</string>
+
+</resources>

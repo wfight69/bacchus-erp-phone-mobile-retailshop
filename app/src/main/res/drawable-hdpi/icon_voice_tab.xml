@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<selector xmlns:android="http://schemas.android.com/apk/res/android">
+    
+    <item android:state_focused="false" android:state_selected="false" android:state_pressed="false" android:drawable="@drawable/menu_tab02_n" />
+    <item android:state_focused="false" android:state_selected="true"  android:state_pressed="false" android:drawable="@drawable/menu_tab02_s" />
+    
+    <!-- When selected, use grey -->
+    <!-- 
+    <item android:drawable="@drawable/menu_tab02_n" android:state_selected="true" />
+    -->
+    
+    <!-- When not selected, use white -->
+    <!--
+    <item android:drawable="@drawable/menu_tab02_s" />
+    -->
+</selector>

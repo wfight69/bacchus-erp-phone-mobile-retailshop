@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:Android="http://schemas.android.com/apk/res-auto"
+    package="com.bacchuserpshop">
+
+    <!-- 인터넷  관련 -->
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+
+    <!-- 전화관련 -->
+    <uses-permission android:name="android.permission.VIBRATE" />
+    <uses-permission android:name="android.permission.CALL_PHONE" />
+    <uses-permission android:name="android.permission.READ_PHONE_STATE" />
+    <uses-permission android:name="android.permission.READ_PHONE_NUMBERS" />
+    <uses-permission android:name="android.permission.WAKE_LOCK" />
+    <uses-permission android:name="android.permission.PROCESS_OUTGOING_CALLS" />
+    <uses-permission android:name="android.permission.USB_PERMISSION" />
+
+    <!-- 주소록 권한처리 -->
+    <uses-permission android:name="android.permission.READ_CONTACTS" />
+
+    <!-- SMS/MMS 관련 -->
+   	<uses-permission android:name="android.permission.READ_SMS" />
+	<uses-permission android:name="android.permission.WRITE_SMS" />
+	<uses-permission android:name="android.permission.SEND_SMS" />
+	<uses-permission android:name="android.permission.RECEIVE_SMS" />
+
+    <!-- SD CARD 읽기 및 저장 권한 : -->
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+
+    <!-- 자산이미지 사진찍기 및 QR_Barcode처리 카메라 권한 -->
+    <uses-permission android:name="android.permission.CAMERA" />
+    <uses-permission android:name="android.permission.FLASHLIGHT" />
+
+    <!--
+	<uses-permission android:name="android.permission.RECORD_AUDIO"></uses-permission>
+	<uses-permission android:name="android.permission.RECORD_VIDEO"></uses-permission>
+    -->
+
+    <!-- NFC권한 -->
+    <uses-feature
+        android:name="android.hardware.nfc"
+        android:required="false" />
+    <uses-permission android:name="android.permission.NFC" />
+
+    <!-- GPS권한 -->
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+
+    <!-- 서비스권한처리 -->
+    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
+
+
+    <application
+        android:allowBackup="true"
+        android:icon="@drawable/davada_erp"
+        android:label="@string/pgm_spalsh"
+        android:supportsRtl="false"
+        android:usesCleartextTraffic="true"
+        android:theme="@style/Theme.AppCompat.Light.NoActionBar">
+
+        <activity
+            android:name="com.bacchuserpshop.formact.main.WebViewMangActivity"
+            android:label="@string/pgm_spalsh"
+            android:screenOrientation="portrait">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+
+        <!-- 팝업 적용을 위해 @style:AppTheme 추가해줍니다 -->
+        <activity
+            android:name="com.bacchuserpshop.formact.login.pems.PermissionsActivity"
+            android:configChanges="orientation|screenSize|screenLayout|keyboard|keyboardHidden"
+            android:label="@string/app_name"
+            android:screenOrientation="nosensor"
+            android:theme="@style/AppPremTheme" />
+
+        <!-- ################## 환경설정 ################## -->
+        <!-- 환경설정 Popup Activity -->
+        <activity
+            android:name="com.bacchuserpshop.formact.login.PopConfigActivity"
+            android:label="환경설정"
+            android:theme="@android:style/Theme.Dialog" />
+
+        <!-- FCMPush Message 아래 두개의 서비스 태그를 추가한다. -->
+        <service android:name="com.bacchuserpshop.fcmpush.MyFirebaseMessagingService">
+            <intent-filter>
+                <action android:name="OPEN_ACTIVITY_1" />
+                <action android:name="com.google.firebase.MESSAGING_EVENT" />
+            </intent-filter>
+        </service>
+
+        <service android:name="com.bacchuserpshop.fcmpush.MyFirebaseInstanceIDService">
+            <intent-filter>
+                <action android:name="com.google.firebase.INSTANCE_ID_EVENT" />
+            </intent-filter>
+        </service>
+
+        <!-- 카카오/sms 앱관련 Notification처리 -->
+        <service android:name="com.bacchuserpshop.formact.order.kakao.NotificationService"
+            android:permission="android.permission.BIND_NOTIFICATION_LISTENER_SERVICE">
+            <intent-filter>
+                <action android:name="android.service.notification.NotificationListenerService" />
+            </intent-filter>
+        </service>
+
+    </application>
+
+</manifest>

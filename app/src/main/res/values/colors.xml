@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+  <color name="blue_light">#2D9DC8</color>
+  <color name="blue_dark">#314d61</color>
+  <color name="white">#FFFFFF</color>
+  <color name="green_light">#308A24</color>
+  <color name="black">#000000</color>
+  <color name="black_light">#333</color>
+  <color name="grey_light">#A1A1A1</color>
+  <color name="color_red">#FF2222</color>
+  <color name="yellow">#ffff00</color>
+
+  <!-- 카카오연동 -->
+  <!-- NEW DISIGN -->
+  <color name="color1">#404040</color>
+  <color name="color2">#B2B2B2</color>
+  <color name="color3">#2A2A2A</color>
+  <color name="color4">#E5E5E5</color>
+  <color name="color5">#F6F6F6</color>
+  <color name="color6">#FFFFFF</color>
+  <color name="color7">#000000</color>
+  <color name="color8">#4A4A4C</color>
+
+
+  <!--권한 팝업색깔처리 -->
+  <color name="colorPrimary">#008577</color>
+  <color name="colorPrimaryDark">#00574B</color>
+  <color name="colorAccent">#D81B60</color>
+
+</resources>
