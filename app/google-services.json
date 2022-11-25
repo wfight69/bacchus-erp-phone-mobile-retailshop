@@ -1,34 +1,33 @@
 {
   "project_info": {
-    "project_number": "300243461799",
-    "firebase_url": "https://fcmpush-42a8f.firebaseio.com",
-    "project_id": "fcmpush-42a8f",
-    "storage_bucket": "fcmpush-42a8f.appspot.com"
+    "project_number": "452931919582",
+    "project_id": "bacchuserpshop",
+    "storage_bucket": "bacchuserpshop.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:300243461799:android:96832e0252879df44cdd82",
+        "mobilesdk_app_id": "1:452931919582:android:987ce9010cc0fe1866ec4f",
         "android_client_info": {
           "package_name": "com.bacchuserpshop"
         }
       },
       "oauth_client": [
         {
-          "client_id": "300243461799-bv1tch12pl5m39mhldcse7s03u02pa75.apps.googleusercontent.com",
+          "client_id": "452931919582-b5dadg0t8fgpodjke9go2rc6jnaij1mm.apps.googleusercontent.com",
           "client_type": 3
         }
       ],
       "api_key": [
         {
-          "current_key": "AIzaSyAyB6wwmWip-eTG180ZCe5xD3ztdx-dOQE"
+          "current_key": "AIzaSyB2HUsmwMnAaySfOr2dQ4kmEXIlJ3cViI0"
         }
       ],
       "services": {
         "appinvite_service": {
           "other_platform_oauth_client": [
             {
-              "client_id": "300243461799-bv1tch12pl5m39mhldcse7s03u02pa75.apps.googleusercontent.com",
+              "client_id": "452931919582-b5dadg0t8fgpodjke9go2rc6jnaij1mm.apps.googleusercontent.com",
               "client_type": 3
             }
           ]

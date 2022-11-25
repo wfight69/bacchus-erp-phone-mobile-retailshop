@@ -71,44 +71,22 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
             // 뱃지 처리
             int badgeCount = BadgeCount();
 
-            // JSONObject data => title, message
-            String title   = remoteMessage.getData().get("title");
-            String message =  remoteMessage.getData().get("message");
+            // JSONObject data => title, content
+            String push_type = remoteMessage.getData().get("push_type");
+            String title     = remoteMessage.getData().get("title");
+            String content   =  remoteMessage.getData().get("content");
 
+            Log.d(LOG_TAG, "== onMessageReceived() getNotification() data push_type  : " + push_type);
             Log.d(LOG_TAG, "== onMessageReceived() getNotification() data title      : " + title);
-            Log.d(LOG_TAG, "== onMessageReceived() getNotification() data message    : " + message);
-
-            // wav_div => 1:공지사항, 2:주류판매계산서, 3:세금계산서, 4:갤재금액처리
-            // ex) 공지사항(1), 주류판매계산서(2)
-            char wav_div_char = title.charAt(title.length()-2);
-            int wav_div = Character.getNumericValue(wav_div_char);
+            Log.d(LOG_TAG, "== onMessageReceived() getNotification() data content    : " + content);
 
             // 음성출력
-            MusicPlayer(wav_div);
+            // push_type => NOTICE:공지사항, SALES:주류판매계산서, CONTAINER:주류판매계산서,  PAYMENT:갤재금액, TAX:세금계산서,
+            MusicPlayer(push_type);
 
             // FCM Message Notification
-            String noti_title = title.substring(0, title.length()-3);
-            sendNotification(noti_title, message, badgeCount);
+            sendNotification(title, content, badgeCount);
         }
-
-        /*
-         * json data에서 notification 사용시(개고생함) ==> json.put("notificcation", noti)
-         * 이경우는 badger가 동작안함 => https://www.thetopsites.net/article/51823867.shtml
-        if (remoteMessage.getNotification() != null) {
-            Log.d(LOG_TAG, "== onMessageReceived() getNotification()        : " + remoteMessage.getNotification().toString());
-            Log.d(LOG_TAG, "== onMessageReceived() getNotification() body   : " + remoteMessage.getNotification().getBody());
-
-            // 음성출력
-            //MusicPlayer();
-
-            //추가한것
-            String title = remoteMessage.getNotification().getTitle();
-            String body = remoteMessage.getNotification().getBody();
-
-            // FCM Message Notification
-            sendNotification(title, body, badgeCount);
-        }
-        */
     }
 
     // 뱃지 처리
@@ -175,44 +153,46 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
         mNotificationManager.createNotificationChannel(channel);
     }
 
-
     // 음성출력
-    private void MusicPlayer(int wav_div) {
+    private void MusicPlayer(String push_type) {
 
         Log.i(LOG_TAG, "== onMessageReceived() MusicPlayer() Start.. ");
 
         // 알림메시지 음성 사용여부(Y/N)
         String cfg_voiceuseyn   = ConfigUtils.getNfcVoiceUseYn(getApplicationContext());
         if (cfg_voiceuseyn.toUpperCase().equals("Y")) {
-            //
-            int resid = 1;
-            if (wav_div == 1) {
-                resid = R.raw.notice_ment;
-            } else if (wav_div == 2) {
-                resid = R.raw.sales_invoice_ment;
-            } else if (wav_div == 3) {
-                resid = R.raw.tax_invoice_ment;
-            } else if (wav_div == 4) {
-                resid = R.raw.payment_ment;
+        }
+        //
+        // push_type => NOTICE:공지사항, SALES:주류판매계산서, CONTAINER:주류판매계산서,  PAYMENT:갤재금액, TAX:세금계산서,
+        int resid = 1;
+        if (push_type.equals("NOTICE")) {
+            resid = R.raw.notice_ment;
+        } else if (push_type.equals("SALES")) {
+            resid = R.raw.sales_invoice_ment;
+        } else if (push_type.equals("CONTAINER")) {
+            resid = R.raw.container_invoice_ment;
+        } else if (push_type.equals("PAYMENT")) {
+            resid = R.raw.payment_invoice_ment;
+        } else if (push_type.equals("TAX")) {
+            resid = R.raw.tax_invoice_ment;
+        }
+        //
+        MediaPlayer music = MediaPlayer.create(this, resid);
+        //music.setLooping(true);
+        if(music.isPlaying()){
+            // 재생중이면 실행될 작업 (정지)
+            music.stop();
+            try {
+                music.prepare();
+            } catch (IllegalStateException e) {
+                e.printStackTrace();
+            } catch (IOException e) {
+                e.printStackTrace();
             }
-            //
-            MediaPlayer music = MediaPlayer.create(this, resid);
-            //music.setLooping(true);
-            if(music.isPlaying()){
-                // 재생중이면 실행될 작업 (정지)
-                music.stop();
-                try {
-                    music.prepare();
-                } catch (IllegalStateException e) {
-                    e.printStackTrace();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-                music.seekTo(0);
-            }else{
-                // 재생중이 아니면 실행될 작업 (재생)
-                music.start();
-            }
+            music.seekTo(0);
+        }else{
+            // 재생중이 아니면 실행될 작업 (재생)
+            music.start();
         }
     };
 
