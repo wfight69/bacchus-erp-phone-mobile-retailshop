@@ -762,8 +762,7 @@ System.out.println("== ConfigUtils getMyCellPhoneNo() => " + my_cell_phone_no);
 									String wholesalerUuid,
 									String employeeUuid,
 									String entprsCd,
-									String filterNormlMsg, String filterExcptMsg,
-									String filterUseYn,
+									String retailShopUuid,
 									String jwtToken)
 	{
 		pref = context.getSharedPreferences("bacchus_erp", Activity.MODE_PRIVATE);
@@ -771,9 +770,7 @@ System.out.println("== ConfigUtils getMyCellPhoneNo() => " + my_cell_phone_no);
 		editor.putString("config_wholesalerUuid", wholesalerUuid);
 		editor.putString("config_employeeUuid", employeeUuid);
 		editor.putString("config_entprs_cd", entprsCd);
-		editor.putString("config_edtxt_filter", filterNormlMsg);
-		editor.putString("config_except_filter", filterExcptMsg);
-		editor.putString("config_filter_use_yn", filterUseYn);
+		editor.putString("config_retailShopUuid", retailShopUuid);
 		editor.putString("config_jwt_token", jwtToken);
 		editor.commit();
 	}

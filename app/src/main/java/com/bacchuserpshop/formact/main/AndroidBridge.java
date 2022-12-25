@@ -95,17 +95,13 @@ public class AndroidBridge {
         String wholesalerUuid = map.get("wholesalerUuid").toString();
         String entprsCd = map.get("wholesalerCode").toString();
         String employeeUuid = map.get("employeeUuid").toString();
-        String filterNormalMsg = map.get("filterNormalMsg").toString();
-        String filterExceptionMsg = map.get("filterExceptionMsg").toString();
-        String filterUseYn = map.get("filterUseYn").toString();
+        String retailShopUuid = map.get("retailShopUuid").toString();
         String jwtToken = map.get("jwtToken").toString();
         //
         ConfigUtils.saveLoginCfg(mContext,  wholesalerUuid,
                                             employeeUuid,
                                             entprsCd,
-                                            filterNormalMsg,
-                                            filterExceptionMsg,
-                                            filterUseYn,
+                                            retailShopUuid,
                                             jwtToken);
 
         String loginInfo = "환경설정저장";
@@ -121,7 +117,7 @@ public class AndroidBridge {
 //                });
 
                 // FCM메시지 전송위한 토큰및 GPS위치 전송
-                new FcmTokenAndGpsSendThread(mContext).start();
+                //new FcmTokenAndGpsSendThread(mContext).start();
             }
         });
     }
@@ -162,8 +158,6 @@ public class AndroidBridge {
 
             // Get the Fcm Token
             String fcmDeviceToken = FirebaseInstanceId.getInstance().getToken();
-//            String cur_latitude =  Double.toString(latitude);    // 현재 위도
-//            String cur_longitude = Double.toString(longitude);   // 현재 경도
 
             ///////////////////////////////////////////////////////
             // 디바디스 토큰객체구성
