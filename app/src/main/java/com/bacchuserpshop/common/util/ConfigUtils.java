@@ -613,6 +613,17 @@ System.out.println("== ConfigUtils getMyCellPhoneNo() => " + my_cell_phone_no);
 		return server;
 	}
 
+	// 접속포트
+	public static String getConnPort(Context context)
+	{
+		pref = context.getSharedPreferences("bacchus_erp", Activity.MODE_PRIVATE);
+		String conn_port = CCoUtil.chkNull(pref.getString("config_conn_port", ""));
+		if (conn_port.equals("") || conn_port == null) {
+			conn_port = "8080";
+		}
+		return conn_port;
+	}
+
 	// GPS거리
 	public static String getGpsDistance(Context context)
 	{

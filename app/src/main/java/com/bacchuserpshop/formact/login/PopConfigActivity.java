@@ -26,12 +26,11 @@ public class PopConfigActivity extends Activity {
 	private SharedPreferences pref = null;
 	
 	private EditText   config_edtxt_conn_server   		= null;			// 접속서버 설정
-	private EditText   config_edtxt_gps_distance  		= null;			// GPS거리
-	private EditText   config_edtxt_as_call_time  		= null;			// AS콜리프레쉬 타임
+	private EditText   config_edtxt_conn_port   		= null;			// 접속포트설정
 	private CheckBox   config_chkbox_nfc_voice_use_yn = null;			// NFC음성 설정
 	
 	private String 	   config_conn_server				= null;		// 접속서버
-	private String 	   config_gps_distance				= null;		// GPS거리
+	private String 	   config_conn_port				= null;		// GPS거리
 	private String 	   config_as_call_time 				= null;		// AS콜리프레쉬 타임
 	private String 	   config_nfc_voice_use_yn			= "N";		// NFC음성 사용여부(Y/N)
 	
@@ -61,8 +60,7 @@ public class PopConfigActivity extends Activity {
 	 */
 	private void setLayout(){
 		config_edtxt_conn_server 		= (EditText)findViewById(R.id.config_edtxt_conn_server);
-		config_edtxt_gps_distance 		= (EditText)findViewById(R.id.config_edtxt_gps_distance);
-		config_edtxt_as_call_time 		= (EditText)findViewById(R.id.config_edtxt_as_call_time);
+		config_edtxt_conn_port 		= (EditText)findViewById(R.id.config_edtxt_conn_port);
 		config_chkbox_nfc_voice_use_yn	= (CheckBox)findViewById(R.id.config_chkbox_nfc_voice_use_yn);
         
 		config_btnClose = (Button) findViewById(R.id.config_btnClose);
@@ -80,20 +78,10 @@ public class PopConfigActivity extends Activity {
 		Log.i(LOG_TAG, "== 환경저장  isFormValidate() start..");
 
 		config_conn_server	= config_edtxt_conn_server.getText().toString();
-		config_gps_distance	= config_edtxt_gps_distance.getText().toString();
-		config_as_call_time	= config_edtxt_as_call_time.getText().toString();
+		config_conn_port	= config_edtxt_conn_port.getText().toString();
 
-		Log.i(LOG_TAG, "== config_gps_distance	=> " + config_gps_distance);
+		Log.i(LOG_TAG, "== config_conn_port	=> " + config_conn_port);
 		Log.i(LOG_TAG, "== config_as_call_time 	=> " + config_as_call_time);
-
-		//////////////////////////////////////////////////////////////
-		if (config_gps_distance == null || config_gps_distance.equals("") || config_gps_distance.equals("0")) {
-			formMsg = "GPS거리를 입력하세요.";
-			config_edtxt_gps_distance.setFocusable(true);
-		} else if (config_as_call_time == null || config_as_call_time.equals("") || config_as_call_time.equals("0")) {
-			formMsg = "콜접수 갱신시간(분)을 입력하세요.";
-			config_edtxt_as_call_time.setFocusable(true);
-		}
 
 		if (!formMsg.equals("")) {
 			DialogUtils.messageDialog(PopConfigActivity.this,  formMsg);
@@ -168,12 +156,10 @@ public class PopConfigActivity extends Activity {
 			// 환경설정 가져오기.
 			//config_conn_server 		= CCoUtil.chkNull(pref.getString("config_conn_server", ""));
 			config_conn_server  = ConfigUtils.getConnServer(PopConfigActivity.this);
-			config_gps_distance = ConfigUtils.getGpsDistance(PopConfigActivity.this);
-			config_as_call_time = ConfigUtils.getAsCallTime(PopConfigActivity.this);
+			config_conn_port = ConfigUtils.getConnPort(PopConfigActivity.this);
 
 			config_edtxt_conn_server.setText(config_conn_server);
-			config_edtxt_gps_distance.setText(config_gps_distance);
-			config_edtxt_as_call_time.setText(config_as_call_time);
+			config_edtxt_conn_port.setText(config_conn_port);
 
 			// NFC음성 사용여부(Y/N)			
 			config_nfc_voice_use_yn = ConfigUtils.getNfcVoiceUseYn(PopConfigActivity.this);
@@ -186,12 +172,10 @@ public class PopConfigActivity extends Activity {
        		SharedPreferences.Editor editor = pref.edit();
 		
 			config_conn_server	= config_edtxt_conn_server.getText().toString();
-			config_gps_distance	= config_edtxt_gps_distance.getText().toString();
-			config_as_call_time	= config_edtxt_as_call_time.getText().toString();
+			config_conn_port	= config_edtxt_conn_port.getText().toString();
 
 			editor.putString("config_conn_server", 	config_conn_server);
-			editor.putString("config_gps_distance", 	config_gps_distance);
-			editor.putString("config_as_call_time", 	config_as_call_time);
+			editor.putString("config_conn_port", 	config_conn_port);
 
 			// NFC음성 사용여부(Y/N) 
 			if (config_chkbox_nfc_voice_use_yn.isChecked()) {

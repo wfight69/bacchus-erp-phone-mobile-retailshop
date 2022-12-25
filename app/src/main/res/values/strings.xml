@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <string name="app_name">바쿠스전사관리서비스</string>
+    <string name="app_name">다바다주문서비스</string>
     <string name="action_settings">Settings</string>
 
     <!-- 환경설정 -->
@@ -29,7 +29,7 @@
     <string name="url_employees">/v1/employees/</string>
 
     <!-- 프로그램명 -->
-    <string name="pgm_spalsh">바쿠스주문</string>
+    <string name="pgm_spalsh">다바다주문</string>
     <string name="pgm_login">로그인</string>
     <string name="pgm_mainmenu">메인메뉴</string>
 

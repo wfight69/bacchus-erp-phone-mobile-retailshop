@@ -126,7 +126,7 @@ public class WebViewMangActivity  extends AppCompatActivity {
                 String conn_server = ConfigUtils.getConnServer(WebViewMangActivity.this);
                 String entprs_cd	= ConfigUtils.getEntprs_cd(WebViewMangActivity.this);
 
-               String connUrl 	= "http://" + conn_server;
+               String connUrl 	= "http://" + conn_server + "/sp/";
 
                 Log.i(LOG_TAG, "== onCreate() start.. => " + connUrl);
 

@@ -10,6 +10,6 @@
         android:layout_centerInParent="true"
         android:orientation="vertical"
         android:scaleType="fitXY"
-        android:src="@drawable/splash_davada_icecall" />
+        android:src="@drawable/splash_retailshop" />
 
 </RelativeLayout>
