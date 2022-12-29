@@ -117,7 +117,7 @@ public class AndroidBridge {
 //                });
 
                 // FCM메시지 전송위한 토큰및 GPS위치 전송
-                //new FcmTokenAndGpsSendThread(mContext).start();
+                new FcmTokenAndGpsSendThread(mContext).start();
             }
         });
     }

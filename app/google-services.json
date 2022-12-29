@@ -1,33 +1,33 @@
 {
   "project_info": {
-    "project_number": "452931919582",
-    "project_id": "bacchuserpshop",
-    "storage_bucket": "bacchuserpshop.appspot.com"
+    "project_number": "943654792910",
+    "project_id": "davada-bacchuserp",
+    "storage_bucket": "davada-bacchuserp.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:452931919582:android:987ce9010cc0fe1866ec4f",
+        "mobilesdk_app_id": "1:943654792910:android:d197825e60bbe262966a9f",
         "android_client_info": {
           "package_name": "com.bacchuserpshop"
         }
       },
       "oauth_client": [
         {
-          "client_id": "452931919582-b5dadg0t8fgpodjke9go2rc6jnaij1mm.apps.googleusercontent.com",
+          "client_id": "943654792910-q28n9ugn5hg13k90tq30r6pl0v76preg.apps.googleusercontent.com",
           "client_type": 3
         }
       ],
       "api_key": [
         {
-          "current_key": "AIzaSyB2HUsmwMnAaySfOr2dQ4kmEXIlJ3cViI0"
+          "current_key": "AIzaSyCvX2TAWMzWqMhf0vecBdPcSHeBgbna6Z0"
         }
       ],
       "services": {
         "appinvite_service": {
           "other_platform_oauth_client": [
             {
-              "client_id": "452931919582-b5dadg0t8fgpodjke9go2rc6jnaij1mm.apps.googleusercontent.com",
+              "client_id": "943654792910-q28n9ugn5hg13k90tq30r6pl0v76preg.apps.googleusercontent.com",
               "client_type": 3
             }
           ]
