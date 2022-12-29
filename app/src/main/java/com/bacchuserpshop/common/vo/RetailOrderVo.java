@@ -19,7 +19,7 @@ public class RetailOrderVo {
 	private String retailOrderTelephone;		// 주문전화번호
 	private String retailOrderChannel;			// 주문채널(SMS, KAKAO, CODE, VOICE)
 	private String orderDescription;			// 주문내용
-	private String fcmDeviceToken;
+	private String fcmToken;
 
 	public String getWholesalerUuid() {
 		return wholesalerUuid;
@@ -61,12 +61,12 @@ public class RetailOrderVo {
 		this.orderDescription = orderDescription;
 	}
 
-	public String getFcmDeviceToken() {
-		return fcmDeviceToken;
+	public String getFcmToken() {
+		return fcmToken;
 	}
 
-	public void setFcmDeviceToken(String fcmDeviceToken) {
-		this.fcmDeviceToken = fcmDeviceToken;
+	public void setFcmToken(String fcmToken) {
+		this.fcmToken = fcmToken;
 	}
 
 }

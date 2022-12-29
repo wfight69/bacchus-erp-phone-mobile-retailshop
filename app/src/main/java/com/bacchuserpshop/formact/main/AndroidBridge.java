@@ -154,15 +154,16 @@ public class AndroidBridge {
 
             // 환경설정 기본정보 정의함
             String wholesalerUuid   = ConfigUtils.getWholesalerUuid(this.context);
-            String employeeUuid = ConfigUtils.getEmployeeUuid(this.context);
+            String retailShopUuid = ConfigUtils.getRetailShopUuid(this.context);
+            String retailShopUserUuid = ConfigUtils.getEmployeeUuid(this.context);
 
             // Get the Fcm Token
-            String fcmDeviceToken = FirebaseInstanceId.getInstance().getToken();
+            String fcmToken = FirebaseInstanceId.getInstance().getToken();
 
             ///////////////////////////////////////////////////////
             // 디바디스 토큰객체구성
             RetailOrderVo orderVo = new RetailOrderVo();
-            orderVo.setFcmDeviceToken(fcmDeviceToken);
+            orderVo.setFcmToken(fcmToken);
 
             // 데이타 생성
             Gson gson = new Gson();
@@ -173,8 +174,8 @@ public class AndroidBridge {
 
             String conn_server 	= ConfigUtils.getConnServer(context);
             String subUrl 	= context.getResources().getString(R.string.url_employees);
-            // /v1/employees/employeeUuid
-            String connUrl = "http://" + conn_server + ":8081" + subUrl + employeeUuid;
+            // /v1/retail-shop-users/retailShopUserUuid
+            String connUrl = "http://" + conn_server + ":8081" + subUrl + retailShopUserUuid;
 
             Log.i(LOG_TAG, "== FcmTokenAndGpsSendThread doSendPut() " + connUrl);
 

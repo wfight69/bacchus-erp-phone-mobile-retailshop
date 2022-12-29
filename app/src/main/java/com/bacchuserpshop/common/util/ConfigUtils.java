@@ -751,6 +751,13 @@ System.out.println("== ConfigUtils getMyCellPhoneNo() => " + my_cell_phone_no);
 		editor.commit();
 	}
 
+	// 소매점Uuid
+	public static String getRetailShopUuid(Context context)
+	{
+		pref = context.getSharedPreferences("bacchus_erp", Activity.MODE_PRIVATE);
+		return CCoUtil.chkNull(pref.getString("config_retailShopUuid", ""));
+	}
+
 	// JWT인증토큰
 	public static String getJwtToken(Context context)
 	{
