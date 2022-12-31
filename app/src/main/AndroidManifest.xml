@@ -55,7 +55,7 @@
 
     <application
         android:allowBackup="true"
-        android:icon="@drawable/davada_erp"
+        android:icon="@drawable/davada_order"
         android:label="@string/pgm_spalsh"
         android:supportsRtl="false"
         android:usesCleartextTraffic="true"

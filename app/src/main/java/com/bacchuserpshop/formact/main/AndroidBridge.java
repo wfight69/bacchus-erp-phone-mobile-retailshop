@@ -173,7 +173,7 @@ public class AndroidBridge {
             //Log.i(LOG_TAG, "== FcmTokenAndGpsSendThread start... jwtToken => " + jwtToken);
 
             String conn_server 	= ConfigUtils.getConnServer(context);
-            String subUrl 	= context.getResources().getString(R.string.url_employees);
+            String subUrl 	= context.getResources().getString(R.string.url_retailshopuser);
             // /v1/retail-shop-users/retailShopUserUuid
             String connUrl = "http://" + conn_server + ":8081" + subUrl + retailShopUserUuid;
 
