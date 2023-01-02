@@ -116,8 +116,24 @@ public class AndroidBridge {
 //                    }
 //                });
 
-                // FCM메시지 전송위한 토큰및 GPS위치 전송
-                new FcmTokenAndGpsSendThread(mContext).start();
+                // Get the New and Old Fcm Token
+                String newFcmToken = FirebaseInstanceId.getInstance().getToken();
+                String oldFcmToken = ConfigUtils.getFcmToken(mContext);               // FCM토큰
+                //
+                if (!newFcmToken.equals(oldFcmToken)) {
+                    // Save the Fcm Token
+                    SharedPreferences pref  = mContext.getSharedPreferences("bacchus_erp", 0);
+                    SharedPreferences.Editor editor = pref.edit();
+                    //
+                    editor.putString("config_fcm_token", newFcmToken);			// FCM토큰저장
+                    editor.commit();
+
+                    Log.i(TAG, "== loginCfgSave newFcmToken => " + newFcmToken);
+                    Log.i(TAG, "== loginCfgSave oldFcmToken => " + oldFcmToken);
+
+                    // FCM메시지 전송위한 토큰및 GPS위치 전송
+                    new FcmTokenAndGpsSendThread(mContext, newFcmToken).start();
+                }
             }
         });
     }
@@ -143,9 +159,11 @@ public class AndroidBridge {
 
         private static final String LOG_TAG = "FcmTokenAndGpsSendThread";
         Context  context    = null;
+        String newFcmToken = null;
 
-        public FcmTokenAndGpsSendThread(Context context) {
+        public FcmTokenAndGpsSendThread(Context context, String newFcmToken) {
             this.context = context;
+            this.newFcmToken = newFcmToken;
         }
 
         public void run() {
@@ -158,12 +176,12 @@ public class AndroidBridge {
             String retailShopUserUuid = ConfigUtils.getEmployeeUuid(this.context);
 
             // Get the Fcm Token
-            String fcmToken = FirebaseInstanceId.getInstance().getToken();
+            //String fcmToken = FirebaseInstanceId.getInstance().getToken();
 
             ///////////////////////////////////////////////////////
             // 디바디스 토큰객체구성
             RetailOrderVo orderVo = new RetailOrderVo();
-            orderVo.setFcmToken(fcmToken);
+            orderVo.setFcmToken(newFcmToken);
 
             // 데이타 생성
             Gson gson = new Gson();
