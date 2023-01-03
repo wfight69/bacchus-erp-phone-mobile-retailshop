@@ -23,10 +23,10 @@
     <string name="Server">192.168.0.87:8080</string>
 
     <!-- 접속프로그램 url목록 -->
-    <string name="url_request_orders">/v1/request-orders</string>
+    <string name="url_request_orders">/api/v1/request-orders</string>
 
     <!-- 소매점사용자 fcmToken업데이트 url목록 -->
-    <string name="url_retailshopuser">/v1/retail-shop-users/</string>
+    <string name="url_retailshopuser">/api/v1/retail-shop-users/</string>
 
     <!-- 프로그램명 -->
     <string name="pgm_spalsh">다바다주문</string>

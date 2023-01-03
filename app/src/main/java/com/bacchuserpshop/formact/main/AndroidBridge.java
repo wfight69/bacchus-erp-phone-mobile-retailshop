@@ -119,6 +119,10 @@ public class AndroidBridge {
                 // Get the New and Old Fcm Token
                 String newFcmToken = FirebaseInstanceId.getInstance().getToken();
                 String oldFcmToken = ConfigUtils.getFcmToken(mContext);               // FCM토큰
+
+                Log.i(TAG, "== loginCfgSave newFcmToken => " + newFcmToken);
+                Log.i(TAG, "== loginCfgSave oldFcmToken => " + oldFcmToken);
+
                 //
                 if (!newFcmToken.equals(oldFcmToken)) {
                     // Save the Fcm Token
@@ -127,9 +131,6 @@ public class AndroidBridge {
                     //
                     editor.putString("config_fcm_token", newFcmToken);			// FCM토큰저장
                     editor.commit();
-
-                    Log.i(TAG, "== loginCfgSave newFcmToken => " + newFcmToken);
-                    Log.i(TAG, "== loginCfgSave oldFcmToken => " + oldFcmToken);
 
                     // FCM메시지 전송위한 토큰및 GPS위치 전송
                     new FcmTokenAndGpsSendThread(mContext, newFcmToken).start();
@@ -192,8 +193,8 @@ public class AndroidBridge {
 
             String conn_server 	= ConfigUtils.getConnServer(context);
             String subUrl 	= context.getResources().getString(R.string.url_retailshopuser);
-            // /v1/retail-shop-users/retailShopUserUuid
-            String connUrl = "http://" + conn_server + ":8081" + subUrl + retailShopUserUuid;
+            // /api/v1/retail-shop-users/retailShopUserUuid
+            String connUrl = "https://" + conn_server + subUrl + retailShopUserUuid;
 
             Log.i(LOG_TAG, "== FcmTokenAndGpsSendThread doSendPut() " + connUrl);
 
