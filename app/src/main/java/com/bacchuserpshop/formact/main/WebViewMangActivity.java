@@ -45,6 +45,7 @@ import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.widget.Toast;
 
+import java.io.File;
 import java.util.ArrayList;
 //import java.util.Base64;
 import java.util.HashMap;
@@ -130,13 +131,10 @@ public class WebViewMangActivity  extends AppCompatActivity {
 
                 Log.i(LOG_TAG, "== onCreate() start.. => " + connUrl);
 
+                // 웹뷰 캐시및 히스토리 삭제
+                webview.clearCache(true);
+                webview.clearHistory();
                 webview.loadUrl(connUrl);
-
-                // 쿠키설정처리
-                //setCookieAllow(this.webview);
-
-                // 로딩 -- 에러가 나는데.. 이유가 .
-                progressDialog = MyProgressDialog.show(this,"로딩중.","111",true,true,null);
 
                 webview.getSettings().setDefaultTextEncodingName("UTF-8");
                 webview.getSettings().setJavaScriptEnabled(true);
@@ -151,9 +149,19 @@ public class WebViewMangActivity  extends AppCompatActivity {
                 //
                 webview.getSettings().setDomStorageEnabled(true);
                 webview.getSettings().setBlockNetworkImage(false);
+                // 캐시처리 설정
+                webview.getSettings().setCacheMode( WebSettings.LOAD_NO_CACHE );
+                webview.getSettings().setAppCacheEnabled( false );
 
                 webview.setWebViewClient(new CustomWebViewClient(WebViewMangActivity.this));
-                webview.setWebChromeClient(new CustomWebChromeClient(WebViewMangActivity.this));
+                //webview.setWebChromeClient(new CustomWebChromeClient(WebViewMangActivity.this));
+
+                // 쿠키설정처리
+                //setCookieAllow(this.webview);
+
+                // 로딩 -- 에러가 나는데.. 이유가 .
+                progressDialog = MyProgressDialog.show(this,"로딩중.","111",true,true,null);
+
                 /*
                 webview.setWebChromeClient(new CustomWebChromeClient(WebViewMangActivity.this) {
                     @Override
@@ -162,38 +170,6 @@ public class WebViewMangActivity  extends AppCompatActivity {
                                 createWebPrintJob(view);
                 });
                 */
-
-                // 웹뷰상 파일다운로드 처리위함
-                webview.setDownloadListener(new DownloadListener() {
-                    @Override
-                    public void onDownloadStart(String url, String userAgent, String contentDisposition, String mimetype, long contentLength) {
-                        try {
-                            DownloadManager.Request request = new DownloadManager.Request(Uri.parse(url));
-                            request.allowScanningByMediaScanner();
-                            request.setNotificationVisibility(DownloadManager.Request.VISIBILITY_VISIBLE_NOTIFY_COMPLETED);
-
-                            request.setDestinationInExternalPublicDir(
-                                    Environment.DIRECTORY_DOWNLOADS,    //Download folder
-                                    "recpt_img");              //Name of file
-
-                            DownloadManager dm = (DownloadManager) getSystemService(DOWNLOAD_SERVICE);
-                            dm.enqueue(request);
-                            Toast.makeText(getApplicationContext(), "Downloading File", Toast.LENGTH_LONG).show();
-                        }
-                        catch (Exception e) {
-                            if (ContextCompat.checkSelfPermission(WebViewMangActivity.this, android.Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
-                                if (ActivityCompat.shouldShowRequestPermissionRationale(WebViewMangActivity.this, android.Manifest.permission.WRITE_EXTERNAL_STORAGE)) {
-                                    Toast.makeText(getBaseContext(), "다운로드를 위해\n권한이 필요합니다.", Toast.LENGTH_LONG).show();
-                                    ActivityCompat.requestPermissions(WebViewMangActivity.this, new String[]{android.Manifest.permission.WRITE_EXTERNAL_STORAGE}, 1004);
-                                }
-                                else {
-                                    Toast.makeText(getBaseContext(), "다운로드를 위해\n권한이 필요합니다.", Toast.LENGTH_LONG).show();
-                                    ActivityCompat.requestPermissions(WebViewMangActivity.this, new String[]{android.Manifest.permission.WRITE_EXTERNAL_STORAGE}, 1004);
-                                }
-                            }
-                        }
-                    }
-                });
 
                 // 웹뷰 <--> 웹page 자바스트립트 연결
                 AndroidBridge ab = new AndroidBridge(webview, WebViewMangActivity.this );
@@ -223,65 +199,6 @@ public class WebViewMangActivity  extends AppCompatActivity {
 		}
     }
 
-    //
-    private final static int FILECHOOSER_NORMAL_REQ_CODE = 11;
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-
-        Log.i(LOG_TAG, "== Y_Test_Msg onActivityResult() requestCode => " + Integer.toString(requestCode));
-
-        switch (requestCode) {
-            case 1:                                                                     // RFID 태그읽기
-                String rslt_msg1 =  data.getStringExtra("tag_json_list");
-                //Toast.makeText(getApplicationContext(),"onActivityResult: " + rslt_msg1, Toast.LENGTH_LONG).show();
-                new Handler().post(new Runnable() {
-                    @Override
-                    public void run() {
-                        webview.loadUrl("javascript:doRfidTagReadRslt(" + rslt_msg1 + ")");
-                    }
-                });
-                break;
-            case FILECHOOSER_NORMAL_REQ_CODE:                                       // 이미지파일 선택처리 테스트
-                //fileChooser 로 파일 선택 후 onActivityResult 에서 결과를 받아 처리함
-                if(resultCode == RESULT_OK) {
-                    //파일 선택 완료 했을 경우
-                    /*
-                    if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-                        mFilePathCallback.onReceiveValue(WebChromeClient.FileChooserParams.parseResult(resultCode, data));
-                    }else{
-                        mFilePathCallback.onReceiveValue(new Uri[]{data.getData()});
-                    }
-                    */
-                    if (data != null) {
-                        Uri[]   results = null;
-                        ClipData clipData = data.getClipData();
-
-                        //멀티선택 /*
-                        if (clipData != null) {
-                            results = new Uri[clipData.getItemCount()];
-                            for (int i = 0; i < clipData.getItemCount(); i++) {
-                                ClipData.Item item = clipData.getItemAt(i);
-                                results[i] = item.getUri();
-                            }
-                            mFilePathCallback.onReceiveValue(results);
-                        } else if (data.getData() != null) {
-                            mFilePathCallback.onReceiveValue(new Uri[]{data.getData()});
-                        }
-                    }
-                    mFilePathCallback = null;
-                } else {
-                    //cancel 했을 경우
-                    if(mFilePathCallback != null) {
-                        mFilePathCallback.onReceiveValue(null);
-                        mFilePathCallback = null;
-                    }
-                }
-                break;
-            default:
-                break;
-        }
-    }
-
     // 쿠키설정처리
     private void setCookieAllow(WebView mWebview) {
         try {
@@ -307,6 +224,8 @@ public class WebViewMangActivity  extends AppCompatActivity {
     @Override
     public void onDestroy() {
         super.onDestroy();
+        // 앱캐시 삭제처리
+        clearAppData(WebViewMangActivity.this);
     }
 
     @Override
@@ -350,6 +269,37 @@ public class WebViewMangActivity  extends AppCompatActivity {
         startActivity(intent);
         //startActivityForResult(intent, 2);
     }
+
+    // 앱캐시 삭제처리
+    public static void clearAppData(Context context) {
+        File cache = context.getCacheDir();  //캐시 폴더 호출
+        File appDir = new File(cache.getParent());  //App Data 삭제를 위해 캐시 폴더의 부모폴더까지 호출
+        if(appDir.exists()) {
+            String[] children = appDir.list();
+            for(String s : children) {
+                //App Data 폴더의 리스트를 deleteDir 를 통해 하위 디렉토리 삭제
+                deleteDir(new File(appDir, s));
+            }
+        }
+    }
+    //
+    public static boolean deleteDir(File dir) {
+        if(dir != null && dir.isDirectory()) {
+            String[] children = dir.list();
+
+            //파일 리스트를 반복문으로 호출
+            for(int i=0; i < children.length; i++) {
+                boolean success = deleteDir(new File(dir, children[i]));
+                if(!success) {
+                    return false;
+                }
+            }
+        }
+
+        //디렉토리가 비어있거나 파일이므로 삭제 처리
+        return dir.delete();
+    }
+
 
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
