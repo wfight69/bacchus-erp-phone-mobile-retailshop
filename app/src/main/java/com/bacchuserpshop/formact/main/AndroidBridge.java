@@ -122,7 +122,6 @@ public class AndroidBridge {
 
                 Log.i(TAG, "== loginCfgSave newFcmToken => " + newFcmToken);
                 Log.i(TAG, "== loginCfgSave oldFcmToken => " + oldFcmToken);
-
                 //
                 if (!newFcmToken.equals(oldFcmToken)) {
                     // Save the Fcm Token
