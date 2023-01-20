@@ -132,8 +132,8 @@ public class WebViewMangActivity  extends AppCompatActivity {
                 Log.i(LOG_TAG, "== onCreate() start.. => " + connUrl);
 
                 // 웹뷰 캐시및 히스토리 삭제
-                webview.clearCache(true);
-                webview.clearHistory();
+//                webview.clearCache(true);
+//                webview.clearHistory();
                 webview.loadUrl(connUrl);
 
                 webview.getSettings().setDefaultTextEncodingName("UTF-8");
@@ -225,7 +225,7 @@ public class WebViewMangActivity  extends AppCompatActivity {
     public void onDestroy() {
         super.onDestroy();
         // 앱캐시 삭제처리
-        clearAppData(WebViewMangActivity.this);
+        //clearAppData(WebViewMangActivity.this);
     }
 
     @Override
@@ -286,7 +286,6 @@ public class WebViewMangActivity  extends AppCompatActivity {
     public static boolean deleteDir(File dir) {
         if(dir != null && dir.isDirectory()) {
             String[] children = dir.list();
-
             //파일 리스트를 반복문으로 호출
             for(int i=0; i < children.length; i++) {
                 boolean success = deleteDir(new File(dir, children[i]));
@@ -295,7 +294,6 @@ public class WebViewMangActivity  extends AppCompatActivity {
                 }
             }
         }
-
         //디렉토리가 비어있거나 파일이므로 삭제 처리
         return dir.delete();
     }

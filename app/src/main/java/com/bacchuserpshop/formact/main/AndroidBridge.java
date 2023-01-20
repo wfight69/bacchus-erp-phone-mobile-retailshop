@@ -93,14 +93,14 @@ public class AndroidBridge {
         Map map = new Gson().fromJson(configJsonMessage, type);
 
         String wholesalerUuid = map.get("wholesalerUuid").toString();
-        String entprsCd = map.get("wholesalerCode").toString();
         String employeeUuid = map.get("employeeUuid").toString();
         String retailShopUuid = map.get("retailShopUuid").toString();
+        String retailShopCode = map.get("retailShopCode").toString();
         String jwtToken = map.get("jwtToken").toString();
         //
         ConfigUtils.saveLoginCfg(mContext,  wholesalerUuid,
                                             employeeUuid,
-                                            entprsCd,
+                                            retailShopCode,
                                             retailShopUuid,
                                             jwtToken);
 
@@ -123,7 +123,7 @@ public class AndroidBridge {
                 Log.i(TAG, "== loginCfgSave newFcmToken => " + newFcmToken);
                 Log.i(TAG, "== loginCfgSave oldFcmToken => " + oldFcmToken);
                 //
-                if (!newFcmToken.equals(oldFcmToken)) {
+                //if (!newFcmToken.equals(oldFcmToken)) {
                     // Save the Fcm Token
                     SharedPreferences pref  = mContext.getSharedPreferences("bacchus_erp", 0);
                     SharedPreferences.Editor editor = pref.edit();
@@ -133,7 +133,7 @@ public class AndroidBridge {
 
                     // FCM메시지 전송위한 토큰및 GPS위치 전송
                     new FcmTokenAndGpsSendThread(mContext, newFcmToken).start();
-                }
+                //}
             }
         });
     }
@@ -187,7 +187,7 @@ public class AndroidBridge {
             Gson gson = new Gson();
             String jsonString   = gson.toJson(orderVo);
 
-            Log.i(LOG_TAG, "== FcmTokenAndGpsSendThread start... jsonString => " + jsonString);
+            Log.i(LOG_TAG, "==  start... jsonString => " + jsonString);
             //Log.i(LOG_TAG, "== FcmTokenAndGpsSendThread start... jwtToken => " + jwtToken);
 
             String conn_server 	= ConfigUtils.getConnServer(context);

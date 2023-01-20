@@ -768,7 +768,7 @@ System.out.println("== ConfigUtils getMyCellPhoneNo() => " + my_cell_phone_no);
 	public static void saveLoginCfg(Context context,
 									String wholesalerUuid,
 									String employeeUuid,
-									String entprsCd,
+									String retailShopCode,
 									String retailShopUuid,
 									String jwtToken)
 	{
@@ -776,7 +776,7 @@ System.out.println("== ConfigUtils getMyCellPhoneNo() => " + my_cell_phone_no);
 		SharedPreferences.Editor editor = pref.edit();
 		editor.putString("config_wholesalerUuid", wholesalerUuid);
 		editor.putString("config_employeeUuid", employeeUuid);
-		editor.putString("config_entprs_cd", entprsCd);
+		editor.putString("config_entprs_cd", retailShopCode);
 		editor.putString("config_retailShopUuid", retailShopUuid);
 		editor.putString("config_jwt_token", jwtToken);
 		editor.commit();
