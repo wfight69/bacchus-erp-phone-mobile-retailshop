@@ -8,48 +8,40 @@ import com.bacchuserpshop.common.vo.GpsInfo;
 import com.bacchuserpshop.formact.login.PopConfigActivity;
 import com.bacchuserpshop.formact.login.pems.PermissionsActivity;
 import com.bacchuserpshop.formact.login.pems.PermissionsChecker;
-import com.bacchuserpshop.formact.main.common.CustomWebChromeClient;
 import com.bacchuserpshop.formact.main.common.CustomWebViewClient;
 
 import com.bacchuserpshop.common.dialog.MyProgressDialog;
 import com.bacchuserpshop.common.util.ConfigUtils;
 //
-import com.google.firebase.iid.FirebaseInstanceId;
-import com.google.gson.Gson;
+import com.google.firebase.FirebaseApp;
 
+import android.Manifest;
 import android.app.Activity;
-import android.app.DownloadManager;
-import android.content.ClipData;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.content.pm.PackageManager;
-import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
-import android.os.Environment;
-import android.os.Handler;
-import android.support.v4.app.ActivityCompat;
-import android.support.v4.app.NotificationManagerCompat;
-import android.support.v4.content.ContextCompat;
-import android.support.v7.app.AppCompatActivity;
+
+import androidx.annotation.RequiresApi;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
+import androidx.core.app.NotificationManagerCompat;
+import androidx.core.content.ContextCompat;
+
+import android.provider.Settings;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.webkit.CookieManager;
-import android.webkit.DownloadListener;
 import android.webkit.ValueCallback;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
-import android.widget.Toast;
 
 import java.io.File;
-import java.util.ArrayList;
 //import java.util.Base64;
-import java.util.HashMap;
-import java.util.List;
 import java.util.Set;
 
 import me.leolin.shortcutbadger.ShortcutBadger;
@@ -70,7 +62,7 @@ public class WebViewMangActivity  extends AppCompatActivity {
     public MyProgressDialog progressDialog;
 
     //PermissionChecker를 권한 체크를 위한 값 선언
-    private static final int REQUEST_CODE = 0;
+    private static final int REQUEST_CODE = 1;
     /*요청받은 권한을 설정합니다. 여기선 저장소와 카메라를 설정
      * 	android.Manifest.permission.INTERNET,				// 인터넷
          android.Manifest.permission.WRITE_EXTERNAL_STORAGE,	// SD카드
@@ -82,18 +74,25 @@ public class WebViewMangActivity  extends AppCompatActivity {
         android.Manifest.permission.RECORD_AUDIO,			// 마이크
         android.Manifest.permission.NFC,
         android.Manifest.permission.ACCESS_FINE_LOCATION	// GPS처리
+        android.Manifest.permission.SEND_SMS,
      * */
     private static final String[] PERMISSIONS =
             new String[]{
                     android.Manifest.permission.INTERNET,
-                    android.Manifest.permission.WRITE_EXTERNAL_STORAGE,
-                    android.Manifest.permission.CALL_PHONE,
-                    android.Manifest.permission.READ_CONTACTS,
-                    android.Manifest.permission.CAMERA,
-                    android.Manifest.permission.NFC,
-                    android.Manifest.permission.ACCESS_FINE_LOCATION,
-                    android.Manifest.permission.SEND_SMS
+                    Manifest.permission.READ_EXTERNAL_STORAGE,
+                    Manifest.permission.WRITE_EXTERNAL_STORAGE
             };
+
+    @RequiresApi(api = Build.VERSION_CODES.TIRAMISU)
+    private static final String[] PERMISSIONS_33 =
+            new String[]{
+                    android.Manifest.permission.INTERNET,
+                    Manifest.permission.READ_MEDIA_IMAGES,
+                    Manifest.permission.READ_MEDIA_AUDIO,
+                    Manifest.permission.READ_MEDIA_VIDEO,
+                    Manifest.permission.POST_NOTIFICATIONS
+            };
+
     private PermissionsChecker checker;
 
     //======================================================
@@ -101,22 +100,36 @@ public class WebViewMangActivity  extends AppCompatActivity {
     // 파일선택위한 콜벡데이타
     public ValueCallback mFilePathCallback;
 
+    // API33버전때문에 생김
+    public static String[] permissions() {
+        String[] p;
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            p = PERMISSIONS_33;
+        } else {
+            p = PERMISSIONS;
+        }
+        return p;
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         //requestWindowFeature(Window.FEATURE_NO_TITLE);
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.web_frozen_asview_mang);
+        setContentView(R.layout.bacchuserp_webview);
 
         try {
-            pref         = getSharedPreferences("bacchus_erp", Activity.MODE_PRIVATE);
+            // FCM-Push 초기화(Anroid-13 즉 SDK-33에서 하나로 통합되어짐무지중요함)
+            FirebaseApp.initializeApp(this);
 
             // 버전 28이상은 환경설정 앱별 권한처리 체크를 하게 해야한다.(저장장치,전화,sms등)
             checker = new PermissionsChecker(this);
-            if (checker.lacksPermissions(PERMISSIONS)) {
+            if (checker.lacksPermissions(permissions())) {
                 // 권한처리 시작
-                PermissionsActivity.startActivityForResult(this, REQUEST_CODE, PERMISSIONS);
+                PermissionsActivity.startActivityForResult(this, REQUEST_CODE, permissions());
             } else {
-                webview = (WebView)findViewById(R.id.web_frozen_webview);
+                webview = (WebView)findViewById(R.id.bacchuserp_webview);
+
+                pref         = getSharedPreferences("bacchus_erp", Activity.MODE_PRIVATE);
 
                 // 환경설정 만들기
                 configGetandSave(1);
@@ -127,7 +140,7 @@ public class WebViewMangActivity  extends AppCompatActivity {
                 String conn_server = ConfigUtils.getConnServer(WebViewMangActivity.this);
                 String entprs_cd	= ConfigUtils.getEntprs_cd(WebViewMangActivity.this);
 
-               String connUrl 	= "http://" + conn_server + "/sp/";
+               String connUrl 	= conn_server + "/sp/";
 
                 Log.i(LOG_TAG, "== onCreate() start.. => " + connUrl);
 
@@ -139,9 +152,6 @@ public class WebViewMangActivity  extends AppCompatActivity {
                 webview.getSettings().setDefaultTextEncodingName("UTF-8");
                 webview.getSettings().setJavaScriptEnabled(true);
 
-                //mWebViewComponent.settings.javaScriptEnabled = true
-                //mWebViewComponent.addJavascriptInterface(JSBridge(),"JSBridge")
-
                 webview.getSettings().setBuiltInZoomControls(true);
                 webview.getSettings().setMediaPlaybackRequiresUserGesture(false);               // audio 플레이어 자동재생처리
                 webview.getSettings().setJavaScriptCanOpenWindowsAutomatically(true);           // window.open사용시
@@ -151,7 +161,7 @@ public class WebViewMangActivity  extends AppCompatActivity {
                 webview.getSettings().setBlockNetworkImage(false);
                 // 캐시처리 설정
                 webview.getSettings().setCacheMode( WebSettings.LOAD_NO_CACHE );
-                webview.getSettings().setAppCacheEnabled( false );
+                //webview.getSettings().setAppCacheEnabled( false );
 
                 webview.setWebViewClient(new CustomWebViewClient(WebViewMangActivity.this));
                 //webview.setWebChromeClient(new CustomWebChromeClient(WebViewMangActivity.this));
@@ -162,41 +172,15 @@ public class WebViewMangActivity  extends AppCompatActivity {
                 // 로딩 -- 에러가 나는데.. 이유가 .
                 progressDialog = MyProgressDialog.show(this,"로딩중.","111",true,true,null);
 
-                /*
-                webview.setWebChromeClient(new CustomWebChromeClient(WebViewMangActivity.this) {
-                    @Override
-                    public boolean onCreateWindow(WebView view, boolean isDialog, boolean isUserGesture, Message resultMsg)
-                    {
-                                createWebPrintJob(view);
-                });
-                */
-
                 // 웹뷰 <--> 웹page 자바스트립트 연결
                 AndroidBridge ab = new AndroidBridge(webview, WebViewMangActivity.this );
                 webview.addJavascriptInterface( ab, "Android" );
-            }
-
-            // NoticeServiceListener 서비스시작
-            boolean isPermissionAllowed = isNotiPermissionAllowed();
-            if(!isPermissionAllowed) {
-                Intent intent = new Intent("android.settings.ACTION_NOTIFICATION_LISTENER_SETTINGS");
-                startActivity(intent);
             }
 
         } catch (Exception e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
         }
-    }
-
-    // 알림앱 권한설정처리 체크
-    private boolean isNotiPermissionAllowed() {
-		Set<String> sets = NotificationManagerCompat.getEnabledListenerPackages(this);
-		if (sets != null && sets.contains(getPackageName())) {
-			return true;
-		} else {
-			return false;
-		}
     }
 
     // 쿠키설정처리
@@ -224,8 +208,6 @@ public class WebViewMangActivity  extends AppCompatActivity {
     @Override
     public void onDestroy() {
         super.onDestroy();
-        // 앱캐시 삭제처리
-        //clearAppData(WebViewMangActivity.this);
     }
 
     @Override
@@ -238,14 +220,20 @@ public class WebViewMangActivity  extends AppCompatActivity {
     }
 
     @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+        if ((keyCode == KeyEvent.KEYCODE_BACK) && webview.canGoBack()) {
+            webview.goBack();
+            //finish();
+            return true;
+        }
+        return super.onKeyDown(keyCode, event);
+    }
+
+    @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
         //boolean result = super.onCreateOptionsMenu(menu);
         //MenuInflater menuInflator = new MenuInflater(this);
-
-        MenuInflater menuInflator = getMenuInflater();
-        menuInflator.inflate(R.menu.saleslogin_menu, menu);
-
         return true;
     }
 
@@ -253,10 +241,6 @@ public class WebViewMangActivity  extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         // TODO Auto-generated method stub
         super.onOptionsItemSelected(item);
-
-        if (item.getItemId() == R.id.login_menu_config) {
-            PopConfigDialog();
-        }
 
         return false;
     }
@@ -298,17 +282,6 @@ public class WebViewMangActivity  extends AppCompatActivity {
         return dir.delete();
     }
 
-
-    @Override
-    public boolean onKeyDown(int keyCode, KeyEvent event) {
-        if ((keyCode == KeyEvent.KEYCODE_BACK) && webview.canGoBack()) {
-            webview.goBack();
-            //finish();
-            return true;
-        }
-        return super.onKeyDown(keyCode, event);
-    }
-
     // 자바스크립트 인터페이스 리로드 처리..
     private class JavaScriptInterface {
         private final WebView m_wv;
@@ -327,16 +300,6 @@ public class WebViewMangActivity  extends AppCompatActivity {
 
         switch(cfDiv) {
             case (1) :
-                ///////////////////////////////
-                //인스톨 후 맨처음 사용자 id없을시..
-                /*
-                String config_cell_tel_no = ConfigUtils.getCell_Tel_No(this);
-                if (config_cell_tel_no.equals("") || config_cell_tel_no == null) {
-                    config_cell_tel_no = ConfigUtils.getMyCellPhoneNo(WebViewMangActivity.this);
-                }
-                Log.i(LOG_TAG, "== configGetandSave()  config_cell_tel_no => " + config_cell_tel_no);
-                */
-
                 /////////////////////////////
                 // 맨처음 초기화시  asset 기본sms링화일  음원파일 복사.
                 String alarmSrcFile 	= ConfigUtils.getFileAlarmName(WebViewMangActivity.this);			// davada_sms_ring.mp3
@@ -398,12 +361,8 @@ public class WebViewMangActivity  extends AppCompatActivity {
                 latitude  =  Double.toString(gps.getLatitude());;     // 위도
                 longitude =  Double.toString(gps.getLongitude());;     // 경도
 
-                // Get the token
-                fcm_token 	= FirebaseInstanceId.getInstance().getToken();
+                Log.i(LOG_TAG, "== onCreate() Gps latitude => " + latitude + ", longitude => " + longitude);
 
-                Log.i(LOG_TAG, "== onCreate() fcm_token => " + fcm_token + ", Gps latitude => " + latitude + ", longitude => " + longitude);
-
-                Log.i(LOG_TAG, "== configGetandSave(2) fcm_token     ;  " + fcm_token);
                 Log.i(LOG_TAG, "== configGetandSave(2) latitude      ;  " + latitude);
                 Log.i(LOG_TAG, "== configGetandSave(2) longitude     ;  " + longitude);
                 Log.i(LOG_TAG, "== configGetandSave(2) badgeCount    ;  " + badgeCount);
@@ -412,9 +371,6 @@ public class WebViewMangActivity  extends AppCompatActivity {
 
                 // 사용자 휴대폰 번호
                 editor.putString("config_cell_tel_no",  cell_tel_no);	 	// 사용자 휴대폰 번호
-
-                // FCM토큰
-                editor.putString("config_fcm_token",    fcm_token);			// FCM토큰
 
                 // GPS현재위치(위도,경도) 저장
                 editor.putString("config_latitude",     latitude);			// 위도
@@ -436,7 +392,7 @@ public class WebViewMangActivity  extends AppCompatActivity {
 
 
     // 메시지 결과 처리(window.receiveMessage로 데이타 전송)
-    public void onJavascriptResultMessage(String json_rslt_msg) {
+    public void onJavascriptResultMessage(final String json_rslt_msg) {
         //
         Log.d("[Y_Test_Msg] onJavascriptResultMessage json_rslt_msg : ", json_rslt_msg);
         //
@@ -455,7 +411,7 @@ public class WebViewMangActivity  extends AppCompatActivity {
         Log.i(LOG_TAG, "== Y_Test_Msg onJavascriptResult() requestCode => " + Integer.toString(requestCode));
         //
         //String rslt_json_msg =  "{" + "\"rslt_cd\":"     + "\"" + rslt_cd + "\"," + "\"rslt_msg\":"    + "\"" + rslt_msg + "\"" + "}";
-        String rslt_json_msg =  "{" + "\"rslt_cd\":" + rslt_cd + "," + "\"rslt_msg\":" + rslt_msg + "}";
+        final String rslt_json_msg =  "{" + "\"rslt_cd\":" + rslt_cd + "," + "\"rslt_msg\":" + rslt_msg + "}";
 
 
         //Toast.makeText(getApplicationContext(),"onJavascriptResult: " + rslt_json_msg, Toast.LENGTH_LONG).show();

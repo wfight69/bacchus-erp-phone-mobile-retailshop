@@ -1,6 +1,9 @@
 package com.bacchuserpshop.fcmpush;
 
+import com.bacchuserpshop.common.net.HttpService;
 import com.bacchuserpshop.common.util.ConfigUtils;
+import com.bacchuserpshop.common.vo.RetailOrderVo;
+import com.bacchuserpshop.formact.main.AndroidBridge;
 import com.bacchuserpshop.formact.main.WebViewMangActivity;
 import com.bacchuserpshop.R;
 
@@ -15,11 +18,12 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.media.MediaPlayer;
 import android.os.Build;
-import android.support.v4.app.NotificationCompat;
+import androidx.core.app.NotificationCompat;
 import android.util.Log;
 
 import com.google.firebase.messaging.FirebaseMessagingService;
 import com.google.firebase.messaging.RemoteMessage;
+import com.google.gson.Gson;
 
 import java.io.IOException;
 
@@ -40,23 +44,22 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
         mNotificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
     }
 
-    /**
+    /*
      * Called if InstanceID token is updated. This may occur if the security of
      * the previous token had been compromised. Note that this is called when the InstanceID token
      * is initially generated so this is where you would retrieve the token.
      */
-    /*
     @Override
     public void onNewToken(String token) {
-        Log.d(LOG_TAG, "Refreshed token: " + token);
+        Log.d(LOG_TAG, "Refreshed onNewToken : " + token);
 
-        // If you want to send messages to this application instance or
-        // manage this apps subscriptions on the server side, send the
-        // Instance ID token to your app server.
-
-        //sendRegistrationToServer(token);
+        // Save the Fcm Token
+        SharedPreferences pref  = getApplicationContext().getSharedPreferences("bacchus_erp", 0);
+        SharedPreferences.Editor editor = pref.edit();
+        //
+        editor.putString("config_fcm_token", token);			// FCM토큰저장
+        editor.commit();
     }
-    */
 
     // [START receive_message]
     @Override
@@ -110,7 +113,7 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
         return badgeCount;
     }
 
-    /**
+    /*
      * Create and show a simple notification containing the received FCM message.
      *
      * @param messageBody FCM message body received.
@@ -120,8 +123,14 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
             Intent intent = new Intent(this, WebViewMangActivity.class);
             intent.putExtra("test", "test");
 
-            PendingIntent pendingIntent = PendingIntent.getActivity(this, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
-
+            PendingIntent pendingIntent = null;
+            if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+                Log.d(LOG_TAG, "== sendNotification() FLAG_MUTABLE...");
+                pendingIntent = PendingIntent.getActivity(this, 0, intent,  PendingIntent.FLAG_UPDATE_CURRENT | PendingIntent.FLAG_IMMUTABLE);
+            } else {
+                Log.d(LOG_TAG, "== sendNotification() FLAG_IMMUTABLE...");
+                pendingIntent = PendingIntent.getActivity(this, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT | PendingIntent.FLAG_IMMUTABLE);
+            }
             mNotificationManager.cancel(notificationId);
             notificationId++;
 
@@ -131,12 +140,11 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
                     .setContentTitle(title)
                     .setContentText(body)
                     .setAutoCancel(true)                            // 선택시 자동으로 삭제되도록 설정.
-                    .setContentIntent(pendingIntent)                // 알림을 눌렀을때 실행할 인텐트 설정.
+                    //.setContentIntent(pendingIntent)                // 알림을 눌렀을때 실행할 인텐트 설정.
                     .setDefaults(Notification.DEFAULT_SOUND | Notification.DEFAULT_VIBRATE);
 
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
                 setupNotificationChannel();
-
                 notificationBuilder.setChannelId(NOTIFICATION_CHANNEL);
             }
 
@@ -152,6 +160,11 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
 
         mNotificationManager.createNotificationChannel(channel);
     }
+//
+//    @Override
+//    public void handleIntent(Intent intent) {
+//        //
+//    }
 
     // 음성출력
     private void MusicPlayer(String push_type) {
@@ -195,5 +208,4 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
             music.start();
         }
     };
-
 }

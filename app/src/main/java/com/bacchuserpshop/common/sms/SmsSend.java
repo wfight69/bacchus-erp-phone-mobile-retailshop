@@ -30,7 +30,7 @@ public class SmsSend {
 		this.context 	 = ctx;
 		
         sms = SmsManager.getDefault();
-        pi  = PendingIntent.getActivity(this.context, 0,  new Intent(), 0);
+        pi  = PendingIntent.getActivity(this.context, 0,  new Intent(), PendingIntent.FLAG_IMMUTABLE);
 	} 
 	
 	// AS접수 : AS접수확인자 메시지 전송

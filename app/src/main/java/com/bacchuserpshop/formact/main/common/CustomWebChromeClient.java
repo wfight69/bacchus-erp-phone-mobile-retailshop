@@ -156,7 +156,7 @@ favicon이란:
         WebView newWebView = new WebView(mContext);
         newWebView.getSettings().setJavaScriptEnabled(true);
 
-        Dialog dialog = new Dialog(mContext);
+        final Dialog dialog = new Dialog(mContext);
         dialog.setContentView(newWebView);
         dialog.show();
         newWebView.setWebChromeClient(new WebChromeClient() {
@@ -260,15 +260,6 @@ favicon이란:
         return super.onJsTimeout();
     }
 
-   
-
-    @Override
-    public void onReachedMaxAppCacheSize(long spaceNeeded,
-            long totalUsedQuota, QuotaUpdater quotaUpdater) {
-        super.onReachedMaxAppCacheSize(spaceNeeded, totalUsedQuota, quotaUpdater);
-    }
-
-    
 
     @Override
     public void onReceivedTouchIconUrl(WebView view, String url,

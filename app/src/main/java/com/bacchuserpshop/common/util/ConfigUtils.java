@@ -608,7 +608,7 @@ System.out.println("== ConfigUtils getMyCellPhoneNo() => " + my_cell_phone_no);
 		pref = context.getSharedPreferences("bacchus_erp", Activity.MODE_PRIVATE);
 		String server = CCoUtil.chkNull(pref.getString("config_conn_server", ""));
 		if (server.equals("") || server == null) {
-			server = "erp.bacchuserp.com";
+			server = "https://erp.bacchuserp.com";
 		}
 		return server;
 	}

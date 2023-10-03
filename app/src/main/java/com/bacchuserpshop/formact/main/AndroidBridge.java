@@ -18,7 +18,6 @@ import com.bacchuserpshop.common.net.HttpService;
 import com.bacchuserpshop.common.util.ConfigUtils;
 import com.bacchuserpshop.common.vo.RetailOrderVo;
 import com.google.common.reflect.TypeToken;
-import com.google.firebase.iid.FirebaseInstanceId;
 import com.google.gson.Gson;
 
 import java.lang.reflect.Type;
@@ -68,7 +67,7 @@ public class AndroidBridge {
         map.put("fcm_token", fcm_token);      // FCM토큰
 
         // 로그인시 위도,경도, 환경설정 가져오기
-        String loginInfo = new Gson().toJson(map);
+        final String loginInfo = new Gson().toJson(map);
 
         myHandler.post(new Runnable() {
             @Override
@@ -104,7 +103,7 @@ public class AndroidBridge {
                                             retailShopUuid,
                                             jwtToken);
 
-        String loginInfo = "환경설정저장";
+        final String loginInfo = "환경설정저장";
         myHandler.post(new Runnable() {
             @Override
             public void run() {
@@ -117,23 +116,11 @@ public class AndroidBridge {
 //                });
 
                 // Get the New and Old Fcm Token
-                String newFcmToken = FirebaseInstanceId.getInstance().getToken();
-                String oldFcmToken = ConfigUtils.getFcmToken(mContext);               // FCM토큰
-
+                String newFcmToken = ConfigUtils.getFcmToken(mContext);               // FCM토큰
                 Log.i(TAG, "== loginCfgSave newFcmToken => " + newFcmToken);
-                Log.i(TAG, "== loginCfgSave oldFcmToken => " + oldFcmToken);
-                //
-                //if (!newFcmToken.equals(oldFcmToken)) {
-                    // Save the Fcm Token
-                    SharedPreferences pref  = mContext.getSharedPreferences("bacchus_erp", 0);
-                    SharedPreferences.Editor editor = pref.edit();
-                    //
-                    editor.putString("config_fcm_token", newFcmToken);			// FCM토큰저장
-                    editor.commit();
 
-                    // FCM메시지 전송위한 토큰및 GPS위치 전송
-                    new FcmTokenAndGpsSendThread(mContext, newFcmToken).start();
-                //}
+                // FCM메시지 전송위한 토큰및 GPS위치 전송
+                new FcmTokenAndGpsSendThread(mContext, newFcmToken).start();
             }
         });
     }
@@ -193,7 +180,7 @@ public class AndroidBridge {
             String conn_server 	= ConfigUtils.getConnServer(context);
             String subUrl 	= context.getResources().getString(R.string.url_retailshopuser);
             // /api/v1/retail-shop-users/retailShopUserUuid
-            String connUrl = "https://" + conn_server + subUrl + retailShopUserUuid;
+            String connUrl = conn_server + subUrl + retailShopUserUuid;
 
             Log.i(LOG_TAG, "== FcmTokenAndGpsSendThread doSendPut() " + connUrl);
 

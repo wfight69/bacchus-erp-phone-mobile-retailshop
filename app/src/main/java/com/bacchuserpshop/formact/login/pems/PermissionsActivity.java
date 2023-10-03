@@ -1,17 +1,23 @@
 package com.bacchuserpshop.formact.login.pems;
 import com.bacchuserpshop.formact.main.WebViewMangActivity;
 import com.bacchuserpshop.R;
+
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
-import android.support.v4.app.ActivityCompat;
-import android.support.v7.app.AlertDialog;
-import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 
+import androidx.activity.result.ActivityResultCallback;
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
 
 public class PermissionsActivity extends AppCompatActivity {
 
@@ -64,12 +70,6 @@ public class PermissionsActivity extends AppCompatActivity {
     @Override
     public void onDestroy() {
         super.onDestroy();
-        /*
-        if (gpsTokenServiceIntent!=null) {
-            stopService(gpsTokenServiceIntent);
-            gpsTokenServiceIntent = null;
-        }
-        */
     }
 
     private String[] getPermissions() {
@@ -77,10 +77,17 @@ public class PermissionsActivity extends AppCompatActivity {
     }
 
     private void requestPermissions(String... permissions) {
-        ActivityCompat.requestPermissions(this, permissions, PERMISSION_REQUEST_CODE);
+        // SDK API-33 버전에서는 지원하지 않음.. Android-12버전(SDK 32)사용
+        //ActivityCompat.requestPermissions(this, permissions, PERMISSION_REQUEST_CODE);
+        //
+        Log.i(LOG_TAG, "== onResume() requestPermissions launch..");
+        // SDK API-33 버전사용함
+        requestPermissionsLauncher.launch(permissions);
     }
 
     private void allPermissionsGranted() {
+        Log.i(LOG_TAG, "== onResume() allPermissionsGranted..");
+
         setResult(PERMISSIONS_GRANTED);
         finish();
 
@@ -88,16 +95,48 @@ public class PermissionsActivity extends AppCompatActivity {
         goToLoginScreen();
     }
 
-    @Override
-    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
-        if (requestCode == PERMISSION_REQUEST_CODE && hasAllPermissionsGranted(grantResults)) {
-            requiresCheck = true;
-            allPermissionsGranted();
-        } else {
-            requiresCheck = false;
-            showMissingPermissionDialog();
-        }
-    }
+    // SDK API-33 버전사용함
+    private ActivityResultLauncher<String[]> requestPermissionsLauncher = registerForActivityResult(
+            new ActivityResultContracts.RequestMultiplePermissions(),
+            grantResults ->
+            {
+                Log.i(LOG_TAG, "== onResume() registerForActivityResult grantResults : " + grantResults.toString());
+//                if (hasPermissions(grantResults)) {
+//                    requiresCheck = true;
+//                    allPermissionsGranted();
+//                } else {
+//                    requiresCheck = false;
+//                    showMissingPermissionDialog();
+//                }
+            }
+    );
+
+//    private boolean hasPermissions(String[] permissions) {
+//        if (permissions != null) {
+//            for (String permission : permissions) {
+//                if (ActivityCompat.checkSelfPermission(this, permission) != PackageManager.PERMISSION_GRANTED) {
+//                    Log.d("PERMISSIONS", "Permission is not granted: " + permission);
+//                    return false;
+//                }
+//                Log.d("PERMISSIONS", "Permission already granted: " + permission);
+//            }
+//            return true;
+//        }
+//        return false;
+//    }
+
+    // SDK API-33 버전에서는 지원하지 않음.. Android-12버전(SDK 32)사용
+//    @SuppressLint("MissingSuperCall")
+//    @Override
+//    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+//        if (requestCode == PERMISSION_REQUEST_CODE && hasAllPermissionsGranted(grantResults)) {
+//            requiresCheck = true;
+//            allPermissionsGranted();
+//        } else {
+//            requiresCheck = false;
+//            showMissingPermissionDialog();
+//        }
+//    }
 
     private boolean hasAllPermissionsGranted(@NonNull int[] grantResults) {
         for (int grantResult : grantResults) {
